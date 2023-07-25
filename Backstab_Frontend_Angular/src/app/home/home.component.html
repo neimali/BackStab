@@ -1,0 +1,52 @@
+
+<!-- slider -->
+<div id="carousel">
+  <button (click)="prevImage()" class="arrow arrow-left">
+    <img src="assets/left-arrow.png" alt="Previous image">
+  </button>
+
+    <div class="first">
+      <img class="left" [src]="leftImage" (click)="setCenterImage(leftImage)">
+      <span class="text">{{games[prevIndex].discount}}</span>
+    </div>
+
+    <div class="first-center">
+      <img class="center" [src]="centerImage">
+      <span class="text-center">{{games[currentIndex].discount}}</span>
+    </div>
+
+    <div class="first"> 
+      <img class="right" [src]="rightImage" (click)="setCenterImage(rightImage)">
+      <span class="text">{{games[nextIndex].discount}}</span>
+    </div>
+  
+  <button (click)="nextImage()" class="arrow arrow-right">
+    <img src="assets/right-arrow.png" alt="Next image">
+  </button>
+</div>
+
+<!-- Top filters: hottest, top seller, large amount of discount -->
+
+
+
+
+<!-- Horizontal list-->
+<div class="game-info text-dark">
+  <div *ngFor="let game of games" class="game-details" (mouseover)="mouseOver = game" (mouseleave)="mouseOver = null">
+    <div class="container" [ngClass]="{'border-on-hover': mouseOver === game}">
+      <img class="game-image" [src]="game.url">
+      <div class="info-container">
+        <h2 class="game-name">{{game.name}}</h2>
+        <p>
+          <span class="game-price-after-dsc">${{game.price_dc}}</span>
+          <span class="game-price slashed-word">${{game.price}}</span>
+        </p>
+        <p class="game-discount">{{game.discount}}</p>
+      </div>
+    <div class="game-hover-info" *ngIf="mouseOver === game">
+      <div *ngFor="let img of game.gameImages">
+        <img [src]="img" class="game-hover-image" alt="Game image">
+      </div>
+    </div>
+  </div>
+</div>

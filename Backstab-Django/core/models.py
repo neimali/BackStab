@@ -24,4 +24,5 @@ class Game(models.Model):
 
 class GameImage(models.Model):
     gameId = models.IntegerField
-    headImageURL = models.CharField(max_length=256)
+    headImageURL = models.CharField(max_length=128)
+    gameImages = models.ArrayField(models.CharField(max_length=128))

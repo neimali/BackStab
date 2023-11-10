@@ -18,11 +18,21 @@ def get_game():
 
 def get_price():
     # url = 'http://store.steampowered.com/api/appdetails?appids=500&cc=us&filters=price_overview'
-    for game in Game.objects.values():
-        game_id = game['gameId']
-        payload = {'appids': game_id, 'cc': 'ca', 'filters': 'price_overview'}
-        r = requests.get('http://store.steampowered.com/api/appdetails', params=payload)
-        data = r.json()
-        data = data[str(game_id)]['data']['price_overview']
-        game_discount = GameDiscount(gameId=game_id, gameInitialPrice=data['initial'], gameFinalPrice=data['final'], currency='ca', discount=data['discount_percent'])
-        game_discount.save()
+    game_ids = Game.objects.values_list('gameId', flat=True)
+    game_ids = game_ids[:50]
+    query_str = ','.join(map(str, game_ids))
+    payload = {'appids': query_str, 'cc': 'ca', 'filters': 'price_overview'}
+    r = requests.get('http://store.steampowered.com/api/appdetails', params=payload)
+    data = r.json()
+    for game_id in data.keys():
+        if data[game_id]['success']:
+            try:
+                price_detail = data[game_id]['data']['price_overview']
+                game_discount = GameDiscount(gameId=game_id, gameInitialPrice=price_detail['initial'],
+                                             gameFinalPrice=price_detail['final'], currency='ca',
+                                             discount=price_detail['discount_percent'])
+                game_discount.save()
+            except:
+                continue
+        else:
+            continue

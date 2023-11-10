@@ -20,7 +20,7 @@ class GameImageSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class PricingSerializer(serializers.ModelSerializer):
-    discount = GameDiscountSerializer(many=True)
+class PricingSerializer(serializers.Serializer):
     game = GameSerializer(many=True)
-    GameImage = GameImageSerializer(many=True)
+    discount = GameDiscountSerializer(many=True)
+    gameImage = GameImageSerializer(many=True)
